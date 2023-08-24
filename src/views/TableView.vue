@@ -7,15 +7,30 @@
       }
     },
   
-  mounted(){
-    // Quando a pagina é carregada, é buscado os itens dentro do localstorage
-    // entao são armazenados na variavel itens
-    const itensExistentes = JSON.parse(localStorage.getItem('itens')) || [];
-    this.itens = itensExistentes;
-    console.log(this.itens);
+    mounted(){
+      // assim que a pagina é carregada, é chamada a 
+      // funcao para carregar a tabela 
+      this.atualizaTabela();
+    },
+    
+    methods:{
+      atualizaTabela(){
+        // busca os itens dentro do localstorage
+        // entao são armazenados na variavel itens
+        const itensExistentes = JSON.parse(localStorage.getItem('itens')) || [];
+        this.itens = itensExistentes;
+        console.log(this.itens);
+      },
+
+      excluir(index){
+        this.itens.splice(index, 1);
+        localStorage.setItem('itens',JSON.stringify(this.itens));
+        alert("Item excluido com sucesso!");
+      }
+    }
   }
-}
-  </script>
+
+</script>
 
 <template>
     <div class="container">
@@ -46,7 +61,7 @@
               <button class="btn btn-success">
                 Editar
               </button>
-              <button @click="delete(index)" class="btn btn-danger">
+              <button @click="excluir(index)" class="btn btn-danger">
                 Excluir
               </button>
             </td>
