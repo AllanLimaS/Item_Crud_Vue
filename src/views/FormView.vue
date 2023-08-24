@@ -1,5 +1,9 @@
 <script >
+
+  import { vMaska } from "maska"
+
   export default{
+    directives:{ maska : vMaska},
     methods:{
       registrarItem(){
         this.validarCampos();
@@ -42,18 +46,33 @@
       return unidadeSelecionada;
       },
       validarQuantidade(){
-        const quantidadeInput = this.$refs.quantidadeInput;
 
-        
-        
-        // Limitar a 3 casas decimais
-        if (quantidadeInput.value.indexOf('.') !== -1) {
-          const partes = quantidadeInput.value.split('.');
-          if (partes[1].length > 3) {
-            quantidadeInput.value = partes[0] + '.' + partes[1].substr(0, 3);
+        const quantidadeInput = this.$refs.quantidadeInput;
+        // Verifica se o campo quantidade possui valor 
+        if(quantidadeInput.value){
+          const unidadeInput = this.verificaRadios();
+
+          if(unidadeInput.value == "1"){
+            quantidadeInput.value = quantidadeInput.value + " lt";
+          }else if (unidadeInput.value == "2"){
+            quantidadeInput.value = quantidadeInput.value + " kg";
+          }else if (unidadeInput.value == "3"){
+            quantidadeInput.value = quantidadeInput.value + " un";
           }
         }
+      },
+      apagaQuantidade(){
+        const quantidadeInput = this.$refs.quantidadeInput;
+        quantidadeInput.value = "";
+        const unidadeInput = this.verificaRadios();
 
+          if(unidadeInput.value == "1"){
+            quantidadeInput.;
+          }else if (unidadeInput.value == "2"){
+            quantidadeInput.value = quantidadeInput.value + " kg";
+          }else if (unidadeInput.value == "3"){
+            quantidadeInput.value = quantidadeInput.value + " un";
+          }
       }
     }
   };
@@ -65,7 +84,7 @@
       <form>
         <div class="mb-3">
           <label for="nomeInput" class="form-label">Nome do item</label>
-          <input ref="nomeInput" type="text" class="form-control" id="nomeInput">
+          <input vMaska="*" ref="nomeInput" type="text" class="form-control" id="nomeInput">
         </div>
 
         <label for="unidadeMedidaRadio" class="form-label"> Unidade de medida</label>
@@ -86,12 +105,15 @@
 
         <div class="mb-3">
           <label for="quantidadeInput" class="form-label">Quantidade</label>
-          <input @input="validarQuantidade" ref="quantidadeInput" type="text" class="form-control" id="quantidadeInput">
+          <input v-maska data-maska="0.999" data-maska-tokens="0:\d:multiple|9:\d:optional"
+          @focusout="validarQuantidade" @focusin="apagaQuantidade"
+          ref="quantidadeInput" type="text" class="form-control" id="quantidadeInput">
         </div>
 
         <div class="mb-3">
           <label for="precoInput" class="form-label">Preço</label>
-          <input ref="precoInput" type="text" class="form-control" id="precoInput">
+          <input v-maska data-maska="R$ 0.99" data-maska-tokens="0:\d:multiple|9:\d:optional" 
+          ref="precoInput" type="text" class="form-control" id="precoInput">
         </div>
 
         <div class="mb-3">
