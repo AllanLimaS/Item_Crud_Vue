@@ -10,13 +10,41 @@
       //  sejam alteradas de maneira dinamica
       maskQuantidade: "0.999",
       tokensQuantidade: "0:\\d:multiple|9:\\d:optional",
+
+      itens: []
     };
   },
     methods:{
+
       registrarItem(){
-        this.validarCampos();
+        if(this.validarCampos()){
+          const nomeInput = this.$refs.nomeInput;
+          const unidadeInput = this.verificaRadios();
+          const quantidadeInput = this.$refs.quantidadeInput;
+          const precoInput = this.$refs.precoInput;
+          const fabricacaoDataInput = this.$refs.fabricacaoDataInput;
+          const vencimentoDataInput = this.$refs.vencimentoDataInput;
+          const perecivelInput = this.$refs.perecivelInput;
+
+          const novoItem = {
+            nome: nomeInput.value,
+            unidade: unidadeInput.value,
+            quantidade: quantidadeInput.value,
+            preco: precoInput.value,
+            fabricacao: fabricacaoDataInput.value,
+            vencimento: vencimentoDataInput.value,
+            perecivel: perecivelInput.checked
+          };
+          this.itens.push(novoItem);
+          const itensExistentes = JSON.parse(localStorage.getItem('itens')) || [];
+          itensExistentes.push(novoItem)
+          localStorage.setItem('itens',JSON.stringify(itensExistentes));
+          this.limparCampos();
+        }
+        console.log(this.itens);
       },
-      cancelar(){
+
+      limparCampos(){
         this.$refs.nomeInput.value = "";
         this.$refs.medidaLitro.checked = "";
         this.$refs.medidaQuilograma.checked = "";
@@ -27,6 +55,11 @@
         this.$refs.vencimentoDataInput.value = "";
         this.$refs.perecivelInput.checked = "";
       },
+
+      cancelar(){
+        this.limparCampos();
+      },
+
       validarCampos(){
         const nomeInput = this.$refs.nomeInput;
         const unidadeInput = this.verificaRadios();
@@ -35,8 +68,37 @@
         const fabricacaoDataInput = this.$refs.fabricacaoDataInput;
         const vencimentoDataInput = this.$refs.vencimentoDataInput;
         const perecivelInput = this.$refs.perecivelInput;
+    
+        if (!nomeInput.value) {
+          alert("Campo 'Nome do item' é obrigatório.");
+          return;
+        }
+        if (!unidadeInput) {
+          alert("Selecione uma unidade de medida.");
+          return;
+        }
+        if (!quantidadeInput.value) {
+          alert("Campo 'Quantidade' é obrigatório.");
+          return;
+        }
+        if (!precoInput.value) {
+          alert("Campo 'Preço' é obrigatório.");
+          return;
+        }
+        if (!fabricacaoDataInput.value) {
+          alert("Campo 'Data de fabricação' é obrigatório.");
+          return;
+        }
 
+        if (perecivelInput.checked) {
+          if (!vencimentoDataInput.value) {
+          alert("Campo 'Data de vencimento' é obrigatório para produtos perecíveis.");
+          return;
+          }
+        }
+        return true;
       },
+
       verificaRadios(){
         const medidaLitro = this.$refs.medidaLitro;
         const medidaQuilograma = this.$refs.medidaQuilograma;
@@ -53,6 +115,7 @@
         }
       return unidadeSelecionada;
       },
+
       validarQuantidade(){
 
         const quantidadeInput = this.$refs.quantidadeInput;
@@ -69,6 +132,7 @@
           }
         }
       },
+
       atualizaCampoQuantidade(){
         const quantidadeInput = this.$refs.quantidadeInput;
         quantidadeInput.value = "";
@@ -142,15 +206,17 @@
           <input ref="fabricacaoDataInput" class="form-control" type="date" name="" id="fabricacaoDataInput">
         </div>
 
+        <div class="mb-3 form-check form-switch">
+          <input ref="perecivelInput" class="form-check-input" type="checkbox" role="switch" id="perecivelInput">
+          <label class="form-check-label" for="perecivelInput">Produto perecível</label>
+        </div>
+
         <div class="mb-3">
           <label class="form-label" for="vencimentoDataInput">Data de vencimento</label>
           <input ref="vencimentoDataInput" class="form-control" type="date" name="" id="vencimentoDataInput">
         </div>
 
-        <div class="mb-3 form-check form-switch">
-          <input ref="perecivelInput" class="form-check-input" type="checkbox" role="switch" id="perecivelInput">
-          <label class="form-check-label" for="perecivelInput">Produto perecível</label>
-        </div>
+        
 
       </form>
 
