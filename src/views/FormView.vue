@@ -43,6 +43,8 @@
       },
       validarQuantidade(){
         const quantidadeInput = this.$refs.quantidadeInput;
+
+        
         
         // Limitar a 3 casas decimais
         if (quantidadeInput.value.indexOf('.') !== -1) {
