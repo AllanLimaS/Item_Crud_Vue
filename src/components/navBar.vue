@@ -1,8 +1,8 @@
 <template>
     <div class="wrapper">
         <nav>
-            <RouterLink to="/">Home</RouterLink>
-            <RouterLink to="/table">About</RouterLink>
+            <RouterLink to="/">Formulário</RouterLink>
+            <RouterLink to="/table">Tabela</RouterLink>
         </nav>
     </div>
 </template>

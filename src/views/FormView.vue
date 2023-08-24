@@ -10,8 +10,6 @@
       //  sejam alteradas de maneira dinamica
       maskQuantidade: "0.999",
       tokensQuantidade: "0:\\d:multiple|9:\\d:optional",
-
-      itens: []
     };
   },
     methods:{
@@ -26,6 +24,7 @@
           const vencimentoDataInput = this.$refs.vencimentoDataInput;
           const perecivelInput = this.$refs.perecivelInput;
 
+          // cria um objeto com todos os valores do formulário
           const novoItem = {
             nome: nomeInput.value,
             unidade: unidadeInput.value,
@@ -35,13 +34,19 @@
             vencimento: vencimentoDataInput.value,
             perecivel: perecivelInput.checked
           };
-          this.itens.push(novoItem);
+
+          // busca no local storage os itens ja existentes 
+          // caso nao exista nenhum, cria um array vazio 
           const itensExistentes = JSON.parse(localStorage.getItem('itens')) || [];
+          
+          // insere o novo item no array
           itensExistentes.push(novoItem)
+
+          // armazena no local storage
           localStorage.setItem('itens',JSON.stringify(itensExistentes));
+          alert("Item cadastrado com sucesso!");
           this.limparCampos();
         }
-        console.log(this.itens);
       },
 
       limparCampos(){
@@ -70,7 +75,7 @@
         const perecivelInput = this.$refs.perecivelInput;
     
         if (!nomeInput.value) {
-          alert("Campo 'Nome do item' é obrigatório.");
+          alert("Nome para o item é obrigatório.");
           return;
         }
         if (!unidadeInput) {
@@ -82,17 +87,18 @@
           return;
         }
         if (!precoInput.value) {
-          alert("Campo 'Preço' é obrigatório.");
+          alert("Preço do item é obrigatório.");
           return;
         }
         if (!fabricacaoDataInput.value) {
-          alert("Campo 'Data de fabricação' é obrigatório.");
+          alert("Data de fabricação do item é obrigatório.");
           return;
         }
 
+        // verifica o campo de vencimento apenas se for um produto perecivel
         if (perecivelInput.checked) {
           if (!vencimentoDataInput.value) {
-          alert("Campo 'Data de vencimento' é obrigatório para produtos perecíveis.");
+          alert("Data de vencimento é obrigatória para produtos perecíveis.");
           return;
           }
         }

@@ -8,6 +8,12 @@
   font-weight: normal;
 }
 
+.container{
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
 a,
 .green {
   text-decoration: none;
