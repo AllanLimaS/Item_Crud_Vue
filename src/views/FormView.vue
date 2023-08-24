@@ -4,6 +4,14 @@
 
   export default{
     directives:{ maska : vMaska},
+    data() {
+    return {
+      //  armazena as propriedades da mascara do campo quantidade, para que  
+      //  sejam alteradas de maneira dinamica
+      maskQuantidade: "0.999",
+      tokensQuantidade: "0:\\d:multiple|9:\\d:optional",
+    };
+  },
     methods:{
       registrarItem(){
         this.validarCampos();
@@ -36,11 +44,11 @@
 
         let unidadeSelecionada = null;
 
-        if (medidaLitro.checked) {
+        if (medidaLitro && medidaLitro.checked) {
           unidadeSelecionada = medidaLitro;
-        } else if (medidaQuilograma.checked) {
+        } else if (medidaQuilograma && medidaQuilograma.checked) {
           unidadeSelecionada = medidaQuilograma;
-        } else if (medidaUnidade.checked) {
+        } else if (medidaUnidade && medidaUnidade.checked) {
           unidadeSelecionada = medidaUnidade;
         }
       return unidadeSelecionada;
@@ -61,18 +69,29 @@
           }
         }
       },
-      apagaQuantidade(){
+      atualizaCampoQuantidade(){
         const quantidadeInput = this.$refs.quantidadeInput;
         quantidadeInput.value = "";
         const unidadeInput = this.verificaRadios();
 
-          if(unidadeInput.value == "1"){
-            quantidadeInput.;
-          }else if (unidadeInput.value == "2"){
-            quantidadeInput.value = quantidadeInput.value + " kg";
-          }else if (unidadeInput.value == "3"){
-            quantidadeInput.value = quantidadeInput.value + " un";
-          }
+        // caso nenhum tipo de unidade estiver selecionado, campo é desabilitado.
+        if (unidadeInput == null){
+          quantidadeInput.disabled = true;
+        }else{
+          quantidadeInput.disabled = false;
+        }
+
+        // altera a mascara do campo de unidade com base no checkbox preenchido
+        if (unidadeInput.value == "1"){
+          this.maskQuantidade = "0.999";
+          this.tokensQuantidade = "0:\\d:multiple|9:\\d:optional";
+        } else if (unidadeInput.value == "2"){
+          this.maskQuantidade = "0.999";
+          this.tokensQuantidade = "0:\\d:multiple|9:\\d:optional";
+        } else if (unidadeInput.value == "3"){
+          this.maskQuantidade = "0";
+          this.tokensQuantidade = "0:\\d:multiple";
+        }
       }
     }
   };
@@ -90,23 +109,25 @@
         <label for="unidadeMedidaRadio" class="form-label"> Unidade de medida</label>
         <div class="mb-3" id="unidadeMedidaRadio">
           <div class="form-check form-check-inline">
-            <input ref="medidaLitro" class="form-check-input" type="radio" name="inlineRadioOptions" id="medidaLitro" value="1">
-            <label class="form-check-label" for="inlineRadio1">Litro</label>
+            <input @change="atualizaCampoQuantidade" ref="medidaLitro" class="form-check-input" type="radio" name="inlineRadioOptions" id="medidaLitro" value="1">
+            <label class="form-check-label" for="medidaLitro">Litro</label>
           </div>
           <div class="form-check form-check-inline">
-            <input ref="medidaQuilograma" class="form-check-input" type="radio" name="inlineRadioOptions" id="medidaQuilograma" value="2">
-            <label class="form-check-label" for="inlineRadio2">Quilograma</label>
+            <input @change="atualizaCampoQuantidade" ref="medidaQuilograma" class="form-check-input" type="radio" name="inlineRadioOptions" id="medidaQuilograma" value="2">
+            <label class="form-check-label" for="medidaQuilograma">Quilograma</label>
           </div>
           <div class="form-check form-check-inline">
-            <input ref="medidaUnidade" class="form-check-input" type="radio" name="inlineRadioOptions" id="medidaUnidade" value="3">
-            <label class="form-check-label" for="inlineRadio2">Unidade</label>
+            <input @change="atualizaCampoQuantidade" ref="medidaUnidade" class="form-check-input" type="radio" name="inlineRadioOptions" id="medidaUnidade" value="3">
+            <label class="form-check-label" for="medidaUnidade">Unidade</label>
           </div>
         </div>
 
         <div class="mb-3">
           <label for="quantidadeInput" class="form-label">Quantidade</label>
-          <input v-maska data-maska="0.999" data-maska-tokens="0:\d:multiple|9:\d:optional"
-          @focusout="validarQuantidade" @focusin="apagaQuantidade"
+            <input disabled v-maska 
+            v-bind:data-maska="maskQuantidade"
+            v-bind:data-maska-tokens="tokensQuantidade"
+          @focusout="validarQuantidade" @focusin="atualizaCampoQuantidade"
           ref="quantidadeInput" type="text" class="form-control" id="quantidadeInput">
         </div>
 
