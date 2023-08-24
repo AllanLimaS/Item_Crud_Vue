@@ -58,9 +58,11 @@
             <td>{{ item.vencimento }}</td>
             <td>{{ item.perecivel }}</td>
             <td>
-              <button class="btn btn-success">
-                Editar
-              </button>
+              <RouterLink class="btn btn-success" 
+              :to="{name: 'form', params: {index: index} }">
+                editar {{index}}
+              </RouterLink>
+
               <button @click="excluir(index)" class="btn btn-danger">
                 Excluir
               </button>

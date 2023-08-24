@@ -5,13 +5,22 @@
   export default{
     directives:{ maska : vMaska},
     data() {
-    return {
-      //  armazena as propriedades da mascara do campo quantidade, para que  
-      //  sejam alteradas de maneira dinamica
-      maskQuantidade: "0.999",
-      tokensQuantidade: "0:\\d:multiple|9:\\d:optional",
-    };
-  },
+      return {
+        //  armazena as propriedades da mascara do campo quantidade, para que  
+        //  sejam alteradas de maneira dinamica
+        maskQuantidade: "0.999",
+        tokensQuantidade: "0:\\d:multiple|9:\\d:optional",
+
+        index:null
+      };
+    },
+
+    created(){
+
+      this.index= this.$route.params.name;
+      console.log(this.$route.params);
+    },
+
     methods:{
 
       registrarItem(){
