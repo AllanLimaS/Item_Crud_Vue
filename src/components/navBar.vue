@@ -66,4 +66,12 @@
     place-items: flex-start;
     flex-wrap: wrap;
   }
+
+  @media screen and (max-width: 768px) {
+    img{
+      max-width: 27px;
+      margin: 9px;
+    }
+  }
+
 </style>

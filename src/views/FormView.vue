@@ -295,7 +295,7 @@
           </div>
 
           <button ref="btnSalvar" @click="salvarItem" class="m-2 btn btn-primary">Salvar</button>
-          <button ref="btnCancelar" @click="cancelar" class="m-2 btn btn-danger">Cancelar</button>
+          <button ref="btnCancelar" @click="cancelar" class="m-2 mb-5  btn btn-danger">Cancelar</button>
         </form>
       </div>
     </div>

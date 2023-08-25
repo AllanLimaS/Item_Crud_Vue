@@ -5,13 +5,21 @@
   --cor-disabled: rgba(0,82,83,0.3);
   }
 
+@media screen and (max-width: 768px) {
+  html, body{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding:0;
+    overflow-y: auto;
+  }
+}
 #app {
   background-color: var(--cor-primaria);
   display: flex;
   place-items: center;
   font-weight: normal;
   min-height: 100vh;
-  min-width: fit-content;
   color: var(--cor-destaque);
 }
 
@@ -96,4 +104,18 @@ h1{
 }
 .table-bordered td {
   border: 1px solid var(--cor-primaria);
+}
+
+
+@media screen and (max-width: 768px) {
+  #app {
+    min-height: 100vh;
+    max-height: fit-content;
+    width: fit-content;
+  }
+  body{
+    height: fit-content;
+    min-height: calc(100vh - 40px);
+
+  }
 }
