@@ -1,20 +1,35 @@
 <template>
     <div class="wrapper">
         <nav>
-            <RouterLink to="/">Formulário</RouterLink>
-            <RouterLink to="/table">Tabela</RouterLink>
+            <RouterLink to="/">
+              <img src="../assets/form.png" alt="">
+            </RouterLink>
+            <RouterLink to="/table">
+              <img src="../assets/table.png" alt="">
+            </RouterLink>
         </nav>
     </div>
 </template>
 <style scoped>
 
 nav {
-    width: 100%;
-    font-size: 12px;
-    text-align: center;
-    margin-top: 2rem;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  text-align: left;
+  margin-top: 2rem;
+  background-color: rgba(65, 100, 74, 0.7);
+  height: 50vh;
+  justify-content: center;
+  align-items: center;
+  border-radius: 25px;
+  gap:25px
+}
+
+img{
+  max-width: 50px;
+  margin: 0.5rem;
+}
   nav a.router-link-exact-active {
     color: var(--color-text);
   }
@@ -25,28 +40,15 @@ nav {
   
   nav a {
     display: inline-block;
-    padding: 0 1rem;
     border-left: 1px solid var(--color-border);
   }
   
   nav a:first-of-type {
     border: 0;
   }
-
-
-  @media (min-width: 1024px) {
     .wrapper {
     display: flex;
     place-items: flex-start;
     flex-wrap: wrap;
-  }
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
 }
 </style>

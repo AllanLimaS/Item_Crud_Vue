@@ -19,13 +19,18 @@
         // entao são armazenados na variavel itens
         const itensExistentes = JSON.parse(localStorage.getItem('itens')) || [];
         this.itens = itensExistentes;
-        console.log(this.itens);
       },
 
       excluir(index){
         this.itens.splice(index, 1);
         localStorage.setItem('itens',JSON.stringify(this.itens));
         alert("Item excluido com sucesso!");
+      },
+
+      editar(index){
+        // redireciona para o formulario passando o index 
+        // do item que será editado
+        this.$router.push({path: '/', query : { index: index}});
       }
     }
   }
@@ -58,13 +63,13 @@
             <td>{{ item.vencimento }}</td>
             <td>{{ item.perecivel }}</td>
             <td>
-              <RouterLink class="btn btn-success" 
-              :to="{name: 'form', params: {index: index} }">
-                editar {{index}}
-              </RouterLink>
-
-              <button @click="excluir(index)" class="btn btn-danger">
-                Excluir
+              <button class="btn btn-success" 
+                      @click="editar(index)">
+                      editar
+              </button>
+              <button class="btn btn-danger"
+                      @click="excluir(index)" >
+                      Excluir
               </button>
             </td>
 
