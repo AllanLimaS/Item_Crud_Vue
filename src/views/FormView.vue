@@ -1,5 +1,4 @@
 <script >
-
   import { vMaska } from "maska"
 
   export default{
@@ -15,47 +14,96 @@
       };
     },
 
-    created(){
+    mounted(){
+      // Quando a pagina é carregada, é verificado se existe algum 
+      // parametro no router, indicando uma edição de item
+      this.index = this.$route.query.index;
 
-      this.index= this.$route.params.name;
-      console.log(this.$route.params);
+      if(this.index >= 0 ){
+
+        const btnSalvar = this.$refs.btnSalvar;
+        btnSalvar.innerHTML = "Editar item";
+        const btnCancelar = this.$refs.btnCancelar;
+        btnCancelar.innerHTML = "Cancelar edição";
+        
+        const itens = JSON.parse(localStorage.getItem('itens')) || [];
+        const item = itens[this.index];
+        
+        // verifica se o item existe dentro do local storage
+        if(item){
+
+          // Passa todas as informações para o form
+          this.$refs.nomeInput.value = item.nome;
+          // Ajusta o checkbox 
+          switch (item.unidade){
+            case "1":
+              this.$refs.medidaLitro.checked = true;
+              break;
+            case "2":
+              this.$refs.medidaQuilograma.checked = true;
+              break;
+            case "3":
+              this.$refs.medidaUnidade.checked = true;
+              break;
+          }
+          // ajusta o input da quantidade sem mascara.
+          this.$refs.quantidadeInput.disabled = false;
+          this.maskQuantidade = "";
+          this.tokensQuantidade = "";
+
+          this.$refs.quantidadeInput.value = item.quantidade;
+          this.$refs.precoInput.value = item.preco;
+          this.$refs.fabricacaoDataInput.value = item.fabricacao;
+          this.$refs.vencimentoDataInput.value = item.vencimento;
+          this.$refs.perecivelInput.checked = item.perecivel;
+        }
+      }
     },
 
     methods:{
 
-      registrarItem(){
+      salvarItem(){
         if(this.validarCampos()){
-          const nomeInput = this.$refs.nomeInput;
-          const unidadeInput = this.verificaRadios();
-          const quantidadeInput = this.$refs.quantidadeInput;
-          const precoInput = this.$refs.precoInput;
-          const fabricacaoDataInput = this.$refs.fabricacaoDataInput;
-          const vencimentoDataInput = this.$refs.vencimentoDataInput;
-          const perecivelInput = this.$refs.perecivelInput;
 
           // cria um objeto com todos os valores do formulário
-          const novoItem = {
-            nome: nomeInput.value,
-            unidade: unidadeInput.value,
-            quantidade: quantidadeInput.value,
-            preco: precoInput.value,
-            fabricacao: fabricacaoDataInput.value,
-            vencimento: vencimentoDataInput.value,
-            perecivel: perecivelInput.checked
+          const item = {
+            nome: this.$refs.nomeInput.value,
+            unidade: this.verificaRadios().value,
+            quantidade: this.$refs.quantidadeInput.value,
+            preco: this.$refs.precoInput.value,
+            fabricacao: this.$refs.fabricacaoDataInput.value,
+            vencimento: this.$refs.vencimentoDataInput.value,
+            perecivel: this.$refs.perecivelInput.checked
           };
-
+          
+          // caso seja uma edicao, o objeto é direcionado para outra funcao
+          if(this.index >= 0){
+            this.editarItemExistente(item);
+            return;
+          }
           // busca no local storage os itens ja existentes 
           // caso nao exista nenhum, cria um array vazio 
           const itensExistentes = JSON.parse(localStorage.getItem('itens')) || [];
           
           // insere o novo item no array
-          itensExistentes.push(novoItem)
+          itensExistentes.push(item)
 
           // armazena no local storage
           localStorage.setItem('itens',JSON.stringify(itensExistentes));
           alert("Item cadastrado com sucesso!");
           this.limparCampos();
         }
+      },
+
+      editarItemExistente(itemEditado){
+        // busca os items no local storage
+        const itens = JSON.parse(localStorage.getItem('itens')) || [];
+        // altera o item solicitado
+        itens[this.index] = itemEditado;
+        // atualiza novamente a lista do local storage
+        localStorage.setItem('itens',JSON.stringify(itens));
+        alert("Item editado com sucesso!");
+        this.cancelar();
       },
 
       limparCampos(){
@@ -72,43 +120,46 @@
 
       cancelar(){
         this.limparCampos();
+
+        // caso houver um index na pagina, esta cancelando uma edicao
+        if(this.index >= 0){
+          // apaga o index
+          this.index = null;
+          // apaga o parametro do router
+          this.$router.push('/');
+          this.$refs.btnSalvar.innerHTML = "Salvar";
+          this.$refs.btnCancelar.innerHTML = "Cancelar";
+        }
       },
 
       validarCampos(){
-        const nomeInput = this.$refs.nomeInput;
-        const unidadeInput = this.verificaRadios();
-        const quantidadeInput = this.$refs.quantidadeInput;
-        const precoInput = this.$refs.precoInput;
-        const fabricacaoDataInput = this.$refs.fabricacaoDataInput;
-        const vencimentoDataInput = this.$refs.vencimentoDataInput;
-        const perecivelInput = this.$refs.perecivelInput;
-    
-        if (!nomeInput.value) {
+        // verifica se os campos estão preenchidos
+        if (!this.$refs.nomeInput.value) {
           alert("Nome para o item é obrigatório.");
-          return;
+          return false;
         }
-        if (!unidadeInput) {
+        if (!this.verificaRadios()) {
           alert("Selecione uma unidade de medida.");
-          return;
+          return false;
         }
-        if (!quantidadeInput.value) {
+        if (!this.$refs.quantidadeInput.value) {
           alert("Campo 'Quantidade' é obrigatório.");
-          return;
+          return false;
         }
-        if (!precoInput.value) {
+        if (!this.$refs.precoInput.value) {
           alert("Preço do item é obrigatório.");
-          return;
+          return false;
         }
-        if (!fabricacaoDataInput.value) {
+        if (!this.$refs.fabricacaoDataInput.value) {
           alert("Data de fabricação do item é obrigatório.");
-          return;
+          return false;
         }
 
         // verifica o campo de vencimento apenas se for um produto perecivel
-        if (perecivelInput.checked) {
-          if (!vencimentoDataInput.value) {
-          alert("Data de vencimento é obrigatória para produtos perecíveis.");
-          return;
+        if (this.$refs.perecivelInput.checked) {
+          if (!this.$refs.vencimentoDataInput.value) {
+            alert("Data de vencimento é obrigatória para produtos perecíveis.");
+            return false;
           }
         }
         return true;
@@ -120,7 +171,7 @@
         const medidaUnidade = this.$refs.medidaUnidade;
 
         let unidadeSelecionada = null;
-
+        // verifica qual checkbox de unidade está selecionado
         if (medidaLitro && medidaLitro.checked) {
           unidadeSelecionada = medidaLitro;
         } else if (medidaQuilograma && medidaQuilograma.checked) {
@@ -128,7 +179,8 @@
         } else if (medidaUnidade && medidaUnidade.checked) {
           unidadeSelecionada = medidaUnidade;
         }
-      return unidadeSelecionada;
+        // retorna apenas o checkbox selecionado
+        return unidadeSelecionada;
       },
 
       validarQuantidade(){
@@ -138,6 +190,7 @@
         if(quantidadeInput.value){
           const unidadeInput = this.verificaRadios();
 
+          // atualiza o texto do input de quantidade com o addon necessário
           if(unidadeInput.value == "1"){
             quantidadeInput.value = quantidadeInput.value + " lt";
           }else if (unidadeInput.value == "2"){
@@ -149,6 +202,8 @@
       },
 
       atualizaCampoQuantidade(){
+        // apaga o conteúdo do campo de quantidade e verifica
+        // qual checkbox está selecionado
         const quantidadeInput = this.$refs.quantidadeInput;
         quantidadeInput.value = "";
         const unidadeInput = this.verificaRadios();
@@ -203,17 +258,17 @@
 
         <div class="mb-3">
           <label for="quantidadeInput" class="form-label">Quantidade</label>
-            <input disabled v-maska 
-            v-bind:data-maska="maskQuantidade"
-            v-bind:data-maska-tokens="tokensQuantidade"
-          @focusout="validarQuantidade" @focusin="atualizaCampoQuantidade"
-          ref="quantidadeInput" type="text" class="form-control" id="quantidadeInput">
+          <input disabled v-maska 
+                  v-bind:data-maska="maskQuantidade"
+                  v-bind:data-maska-tokens="tokensQuantidade"
+                  @focusout="validarQuantidade" @focusin="atualizaCampoQuantidade"
+                  ref="quantidadeInput" type="text" class="form-control" id="quantidadeInput">
         </div>
 
         <div class="mb-3">
           <label for="precoInput" class="form-label">Preço</label>
           <input v-maska data-maska="R$ 0.99" data-maska-tokens="0:\d:multiple|9:\d:optional" 
-          ref="precoInput" type="text" class="form-control" id="precoInput">
+                  ref="precoInput" type="text" class="form-control" id="precoInput">
         </div>
 
         <div class="mb-3">
@@ -231,12 +286,10 @@
           <input ref="vencimentoDataInput" class="form-control" type="date" name="" id="vencimentoDataInput">
         </div>
 
-        
-
       </form>
 
-      <button @click="registrarItem" class="m-2 btn btn-primary">Salvar</button>
-      <button @click="cancelar" class="m-2 btn btn-danger">Cancelar</button>
+      <button ref="btnSalvar" @click="salvarItem" class="m-2 btn btn-primary">Salvar</button>
+      <button ref="btnCancelar" @click="cancelar" class="m-2 btn btn-danger">Cancelar</button>
 
     </div>
   </main>
