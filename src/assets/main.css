@@ -111,11 +111,11 @@ h1{
   #app {
     min-height: 100vh;
     max-height: fit-content;
+    min-width: 100vw;
     width: fit-content;
   }
   body{
     height: fit-content;
     min-height: calc(100vh - 40px);
-
   }
 }
