@@ -233,66 +233,71 @@
 
 <template>
   <main>
-    <div class="container">
-      <form>
-        <div class="mb-3">
-          <label for="nomeInput" class="form-label">Nome do item</label>
-          <input vMaska="*" ref="nomeInput" type="text" class="form-control" id="nomeInput">
+    <div class="container d-flex flex-column">
+      <div class="row">
+        <div class="col-12">
+          <h1>Formulário</h1>
         </div>
+      </div>
+      <div class="row justify-content-center align-items-center">
 
-        <label for="unidadeMedidaRadio" class="form-label"> Unidade de medida</label>
-        <div class="mb-3" id="unidadeMedidaRadio">
-          <div class="form-check form-check-inline">
-            <input @change="atualizaCampoQuantidade" ref="medidaLitro" class="form-check-input" type="radio" name="inlineRadioOptions" id="medidaLitro" value="1">
-            <label class="form-check-label" for="medidaLitro">Litro</label>
+        <form class="col-md-6 col-12 d-flex flex-column align-items-center">
+          <div class="mb-3">
+            <label for="nomeInput" class="form-label">Nome do item</label>
+            <input vMaska="*" ref="nomeInput" type="text" class="form-control" id="nomeInput">
           </div>
-          <div class="form-check form-check-inline">
-            <input @change="atualizaCampoQuantidade" ref="medidaQuilograma" class="form-check-input" type="radio" name="inlineRadioOptions" id="medidaQuilograma" value="2">
-            <label class="form-check-label" for="medidaQuilograma">Quilograma</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input @change="atualizaCampoQuantidade" ref="medidaUnidade" class="form-check-input" type="radio" name="inlineRadioOptions" id="medidaUnidade" value="3">
-            <label class="form-check-label" for="medidaUnidade">Unidade</label>
-          </div>
-        </div>
 
-        <div class="mb-3">
-          <label for="quantidadeInput" class="form-label">Quantidade</label>
-          <input disabled v-maska 
+          <label for="unidadeMedidaRadio" class="form-label"> Unidade de medida</label>
+          <div class="mb-3" id="unidadeMedidaRadio">
+            <div class="form-check form-check-inline">
+              <input @change="atualizaCampoQuantidade" ref="medidaLitro" class="form-check-input" type="radio" name="inlineRadioOptions" id="medidaLitro" value="1">
+              <label class="form-check-label" for="medidaLitro">Litro</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input @change="atualizaCampoQuantidade" ref="medidaQuilograma" class="form-check-input" type="radio" name="inlineRadioOptions" id="medidaQuilograma" value="2">
+              <label class="form-check-label" for="medidaQuilograma">Quilograma</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input @change="atualizaCampoQuantidade" ref="medidaUnidade" class="form-check-input" type="radio" name="inlineRadioOptions" id="medidaUnidade" value="3">
+              <label class="form-check-label" for="medidaUnidade">Unidade</label>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="quantidadeInput" class="form-label">Quantidade</label>
+            <input disabled v-maska 
                   v-bind:data-maska="maskQuantidade"
                   v-bind:data-maska-tokens="tokensQuantidade"
                   @focusout="validarQuantidade" @focusin="atualizaCampoQuantidade"
                   ref="quantidadeInput" type="text" class="form-control" id="quantidadeInput">
-        </div>
+          </div>
 
-        <div class="mb-3">
-          <label for="precoInput" class="form-label">Preço</label>
-          <input v-maska data-maska="R$ 0.99" data-maska-tokens="0:\d:multiple|9:\d:optional" 
-                  ref="precoInput" type="text" class="form-control" id="precoInput">
-        </div>
+          <div class="mb-3">
+            <label for="precoInput" class="form-label">Preço</label>
+            <input v-maska data-maska="R$ 0.99" data-maska-tokens="0:\d:multiple|9:\d:optional" 
+                    ref="precoInput" type="text" class="form-control" id="precoInput">
+          </div>
+        </form>
+        <form class="col-md-6 col-12 d-flex flex-column align-items-center">
+          <div class="mb-3">
+            <label class="form-label" for="fabricacaoDataInput">Data de fabricação</label>
+            <input ref="fabricacaoDataInput" class="form-control" type="date" name="" id="fabricacaoDataInput">
+          </div>
 
-        <div class="mb-3">
-          <label class="form-label" for="fabricacaoDataInput">Data de fabricação</label>
-          <input ref="fabricacaoDataInput" class="form-control" type="date" name="" id="fabricacaoDataInput">
-        </div>
+          <div class="mb-3 form-check form-switch">
+            <input ref="perecivelInput" class="form-check-input" type="checkbox" role="switch" id="perecivelInput">
+            <label class="form-check-label" for="perecivelInput">Produto perecível</label>
+          </div>
 
-        <div class="mb-3 form-check form-switch">
-          <input ref="perecivelInput" class="form-check-input" type="checkbox" role="switch" id="perecivelInput">
-          <label class="form-check-label" for="perecivelInput">Produto perecível</label>
-        </div>
+          <div class="mb-3">
+            <label class="form-label" for="vencimentoDataInput">Data de vencimento</label>
+            <input ref="vencimentoDataInput" class="form-control" type="date" name="" id="vencimentoDataInput">
+          </div>
 
-        <div class="mb-3">
-          <label class="form-label" for="vencimentoDataInput">Data de vencimento</label>
-          <input ref="vencimentoDataInput" class="form-control" type="date" name="" id="vencimentoDataInput">
-        </div>
-
-      </form>
-
-      <button ref="btnSalvar" @click="salvarItem" class="m-2 btn btn-primary">Salvar</button>
-      <button ref="btnCancelar" @click="cancelar" class="m-2 btn btn-danger">Cancelar</button>
-
+          <button ref="btnSalvar" @click="salvarItem" class="m-2 btn btn-primary">Salvar</button>
+          <button ref="btnCancelar" @click="cancelar" class="m-2 btn btn-danger">Cancelar</button>
+        </form>
+      </div>
     </div>
   </main>
 </template>
-
-

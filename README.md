@@ -1,16 +1,20 @@
-# Aplicação web com CRUD de item em Vue 
+## Aplicação web com CRUD de itens em Vue
 
-Para a candidatura de uma vaga de programador Jr. na Univali, foi proposto o seguinte desáfio de criar uma aplicação WEB com CRUD de item, contendo duas paginas, uma para registroo alteração de item, e outra para listagem em tabela dos itens reservados em Local Storage. 
+Para a candidatura a uma vaga de programador Jr. na Univali, foi proposto o desafio de criar uma aplicação web com CRUD de itens, contendo duas páginas: uma para registro e alteração de itens, e outra para listagem em tabela dos itens armazenados no Local Storage, onde também é possível excluí-los.
 
-# Escolha de FrameWork
+# Escolha do Framework
 
-Para produzir essa aplicação escolhi Vue, assim será a minha primeira experiência prática com o framework, me garantindo uma experiência nova para meu currículo.
+Para produzir esta aplicação, escolhi o Vue, o que representa minha primeira experiência prática com o framework, proporcionando uma adição nova ao meu currículo.
 
-Pensei em utilizar JavaScript puro, porem como ja tenho uma boa experiência sobre o mesmo, acredito que não seria interessante para mim (assim como React, que também ja possuo uma experiência), e também não apresentaria um ponto extra para questão da candidatura. 
+Esse framework permite a criação fácil de componentes reutilizáveis ao longo de todo o projeto. Para essa aplicação, apenas foi criado um componente separado chamado "navBar".
 
-## Recommended IDE Setup
+Pensei em utilizar JavaScript puro, porém, como já tenho boa experiência com ele, acredito que não seria interessante para mim (assim como o React, no qual também já tenho experiência), e também não proporcionaria um diferencial extra para a candidatura.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+# Bibliotecas utilizadas
+
+Para auxiliar na produção deste projeto, foram utilizadas duas bibliotecas:
+Bootstrap 5 (via CDN), para auxiliar na responsividade da página e também para reduzir o uso de comandos CSS.
+VMask (via NPM), esta biblioteca auxiliou no uso de máscaras para os campos do formulário.
 
 ## Project Setup
 
